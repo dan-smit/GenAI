@@ -97,7 +97,7 @@ def fetch_sec_filing_sections(ticker: str, sections: list[Section]) -> str:
         elif section == Section.BALANCE_SHEET:
             section_data[section] = statements.balance_sheet()
         elif section == Section.INCOME_STATEMENT:
-            section_data[section] = statements.income_statements()
+            section_data[section] = statements.income_statement()
         elif section == Section.CASHFLOW_STATEMENT:
             section_data[section] = statements.cashflow_statement()
             
