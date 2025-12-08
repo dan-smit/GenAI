@@ -19,11 +19,13 @@ st.set_page_config(page_title="Financial Analysis")
 
 st.subheader("Private AI assistant for financial analysis")
 
+#st.cache_resource stores objects across all users, sessions, and reruns. Can only be used on hashable objects
+#Here we hash the workflow and model so they are not recreated on every user interaction
 @st.cache_resource
 def create_workflow():
     return create_agent()
 
-
+#Cache the LLM model so it is not recreated on every user interaction
 @st.cache_resource
 def create_model():
     if Config.MODEL.provider == ModelProvider.GOOGLE_GENAI and not os.getenv("GEMINI_API_KEY"):
@@ -41,7 +43,7 @@ def create_model():
         **parameters
     )
     
-
+#st.session_state stores variables for user's sessions, allowing them to persist across script reruns
 if "messages" not in st.session_state:
     st.session_state.messages = []
 if "thread_id" not in st.session_state:
@@ -79,10 +81,12 @@ with st.sidebar:
         st.caption(f"Messages in conversation: {len(st.session_state.messages)}")
         
 
+#Escape dollar signs in markdown to prevent rendering issues
 def escape_markdown(text: str) -> str:
     return text.replace("$", r"\$")
 
 
+#Assign avatars and roles to messages and display them in the chat interface
 for message in st.session_state.messages:
     avatar = None
     if isinstance(message, HumanMessage):
@@ -97,15 +101,19 @@ for message in st.session_state.messages:
     with st.chat_message(role, avatar=avatar):
         st.markdown(escape_markdown(message.content))
         
+#Accept user input and process it through the agent workflow
 if prompt := st.chat_input(
     "Ask about a public company's SEC filings and stock prices (e.g. 'Analyze Apple stock')"
     ):
+    # Append user message to the session state
     st.session_state.messages.append(HumanMessage(content=prompt))
     with st.chat_message("user", avatar=":material/person:"):
         st.markdown(prompt)
         
+    # Initialize the agent state with the current conversation messages
     initial_state: AgentState = AgentState(messages=st.session_state.messages.copy())
     
+    # Process the user input through the agent workflow and stream responses
     with st.chat_message("assistant", avatar=":material/smart_toy:"):
         status_container = st.status("**Analyzing your request...**", expanded=True)
         final_answer_placeholder = st.empty()
@@ -114,18 +122,23 @@ if prompt := st.chat_input(
         agent_containers = {}
         agent_content = {}
         
+        # Workflow is created and cached above
         workflow = create_workflow() #create_workflow[AgentState, ContextSchema, AgentState, AgentState]()
         
+        # Stream the workflow output in "messages" mode
         for message_chunk, metadata in workflow.stream(
             initial_state,
             context=ContextSchema(model=create_model()),
             stream_mode="messages"
         ):
+            # Extract agent name from metadata
             agent_name = metadata.get("langgraph_node", "Unknown")
             
+            # Skip empty message chunks
             if not hasattr(message_chunk, "content") or not message_chunk.content:
                 continue
-        
+            
+            # Convert message content to string
             content = str(message_chunk.content)
             
             if agent_name != current_agent:

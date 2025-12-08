@@ -23,7 +23,7 @@ GEMINI_2_5_FLASH = ModelConfig(
 
 class Config:
     SEED = 7
-    MAX_ITERATIONS = 10
+    MAX_ITERATIONS = 3
     MODEL = GEMINI_2_5_FLASH
     CONTEXT_WINDOW = 8192
     
