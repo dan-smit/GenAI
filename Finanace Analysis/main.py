@@ -125,7 +125,12 @@ if prompt := st.chat_input(
         # Workflow is created and cached above
         workflow = create_workflow() #create_workflow[AgentState, ContextSchema, AgentState, AgentState]()
         
-        # Stream the workflow output in "messages" mode
+        # Stream the workflow output in "messages" 
+        # initial_state is the input to the workflow containing the user query and conversation history
+        # context contains the LLM model to be used by the agents in the workflow
+        # stream_mode="messages" streams the output as message chunks from the agents
+        # message_chunk is a message object from the agent (HumanMessage, AIMessage, or ToolMessage)
+        # metadata contains information about the message chunk, including which agent produced it
         for message_chunk, metadata in workflow.stream(
             initial_state,
             context=ContextSchema(model=create_model()),
@@ -141,6 +146,7 @@ if prompt := st.chat_input(
             # Convert message content to string
             content = str(message_chunk.content)
             
+            #Determine when the agent changes to create new sections in the UI
             if agent_name != current_agent:
                 current_agent = agent_name
                 agent_content[agent_name] = ""
@@ -155,10 +161,11 @@ if prompt := st.chat_input(
                         agent_containers[agent_name] = st.empty()
                     elif agent_name == AgentName.SYNTHESIZER:
                         status_container.update(
-                            label="**Synthesizing Final Answer..**"
+                            label="**Synthesizing Final Answer**"
                         )
                         agent_containers[agent_name] = st.empty()
                 
+            # Append agent content for later display
             agent_content[agent_name] += content
             
             if agent_name in agent_containers:
