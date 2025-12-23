@@ -41,7 +41,7 @@ When calling agents, always ask them to provide the analysis for your query.
 </instructions>
 
 <formatting>
-JSON objet with 'next_agent' and 'question' fields
+JSON object with 'next_agent' and 'question' fields
 </formatting>
 """
 
@@ -92,7 +92,7 @@ Choose the appropriate structure based on query type:
 
 TYPE 1 - Initial Company Analysis:
 **Overview** (2-3 sentences)
-Key business metrics, major risks or opportunities
+Key business metrics, major risks, or opportunities
 
 **Price Action** (2-3 sentences)
 Recent trends, key price levels, volatility
@@ -125,6 +125,7 @@ class AgentName(StrEnum):
     SUPERVISOR="Supervisor"
 
 # Data Classes for Agent State and Context
+# Contains messages, iteration count in the workflow, and next agent to call
 @dataclass
 class AgentState:
     messages: Annotated[list, add_messages]
