@@ -38,7 +38,7 @@ streamlit run main.py
 ```
 
 ## Evaluation
-Currently working on agentic evaluation of LLM's. 
+Currently working on agentic evaluation of LLM's. Current implementation uses Google Gemini due due to its ease-of-use and fast processing with its langchain API.
 
 Targeted Metrics:
 1. Supervisor:
@@ -67,3 +67,4 @@ Candidate LLM's (~500M parameter maximum since we're running on CPU) will be cho
     - This can open up locally deployed LLM's implementation
 2. Add more error handling to the architecture. i.e. Functionality that can handle usage for self-hosted API's.
 3. Explore containerization with Docker
+4. Add conversation thread functionality
