@@ -15,7 +15,7 @@ This project uses a hierarchical workflow involving a supervisor agent, two work
 
 
 ## Getting Started
-### Deploying Containers
+### Deploying Locally with Image Containers
 Run the following command under the FinanceAnalysis directory:
 
 ```bash
