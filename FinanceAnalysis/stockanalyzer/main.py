@@ -6,8 +6,8 @@ from edgar import set_identity
 from langchain.chat_models import init_chat_model
 from langchain.messages import AIMessage, HumanMessage
 
-from stockanalyzer.crew import AgentName, AgentState, ContextSchema, create_agent
-from stockanalyzer.config import Config, ModelProvider
+from crew import AgentName, AgentState, ContextSchema, create_agent #stockanalyzer.crew
+from config import Config, ModelProvider
 import os
 
 #to run the app, type the following in the terminal: streamlit run main.py
