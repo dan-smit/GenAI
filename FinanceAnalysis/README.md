@@ -15,9 +15,15 @@ This project uses a hierarchical workflow involving a supervisor agent, two work
 
 
 ## Getting Started
+### Deploying Containers
+Run the following command under the FinanceAnalysis directory:
 
-To run this application locally, I recommend creating a 
-virtual environment (venv), and installing
+```bash
+docker-compose up --build
+```
+
+### Local Deployment
+Create a virtual environment (venv), and installing
 dependencies, which are within the requirements.txt file.
 
 Python version used: 3.11.13
@@ -36,7 +42,7 @@ Once all dependencies are installed, locally hosted models are downloaded, and A
 to the Finance Analysis folder and running the following command
 
 ```bash
-streamlit run main.py
+streamlit run stockanalyzer/main.py
 ```
 
 ## Evaluation
