@@ -2,9 +2,7 @@
 FROM python:3.11-slim
 
 #Sends output logs to terminal, 
-#tells pip not to save cache of packages
-ENV PYTHONUNBUFFERED=1 \
-    PIP_NO_CACHE_DIR=1
+ENV PYTHONUNBUFFERED=1 
 
 WORKDIR /app
 
@@ -17,7 +15,8 @@ RUN apt-get update \
 
 # Copy requirements and install
 COPY requirements.txt ./
-RUN pip install --upgrade pip && pip install -r requirements.txt
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install -r requirements.txt
 
 # Copy application code
 COPY . .
@@ -28,4 +27,4 @@ EXPOSE 8501
 # Ensures Streamlit doesn't open a browser window in the container 
 ENV STREAMLIT_SERVER_HEADLESS=true
 
-CMD ["streamlit", "run", "main.py", "--server.port=8501", "--server.address=0.0.0.0"]
+CMD ["streamlit", "run", "stockanalyzer/main.py", "--server.port=8501", "--server.address=0.0.0.0"]

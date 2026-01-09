@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  finance-analysis:
+    # Build the image from the Dockerfile in this folder
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: finance-analysis:v1.1
+    ports:
+      - "8501:8501"
+    env_file:
+      - vars.env
+    # Optional: mount the project for live editing (remove for pure production)
+    volumes:
+      - ./:/app:ro
+    restart: unless-stopped
