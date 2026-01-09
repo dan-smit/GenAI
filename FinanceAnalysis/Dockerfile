@@ -2,9 +2,12 @@
 FROM python:3.11-slim
 
 #Sends output logs to terminal, 
-ENV PYTHONUNBUFFERED=1 
+ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
+
+# Set PYTHONPATH so Python can find stockanalyzer module
+ENV PYTHONPATH=/app:$PYTHONPATH
 
 # Install minimal build tools 
 RUN apt-get update \
